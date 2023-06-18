@@ -50,6 +50,27 @@ export function MintNFTForm() {
         onChange={(e) => setTokenId(e.target.value)}
         value={tokenId}
       />
+      <label for="word1" className="text-lg font-semibold text-gray-800">word 1</label>
+      <input
+        id="word1"
+        className="px-3 py-2 border border-gray-300 rounded"
+        placeholder="420"
+        value='Ethereum'
+      />
+      <label for="word2" className="text-lg font-semibold text-gray-800">word 2</label>
+      <input
+        id="word2"
+        className="px-3 py-2 border border-gray-300 rounded"
+        placeholder="420"
+        value='公園'
+      />
+      <label for="word3" className="text-lg font-semibold text-gray-800">word 3</label>
+      <input
+        id="word3"
+        className="px-3 py-2 border border-gray-300 rounded"
+        placeholder="420"
+        value='コメダ珈琲'
+      />
       <button 
         className={`px-4 py-2 rounded text-white ${write && !isLoading ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`} 
         disabled={!write || isLoading}>
