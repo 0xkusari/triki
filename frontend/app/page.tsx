@@ -1,6 +1,7 @@
 import { Account } from '../components/Account'
 import { Connect } from '../components/Connect'
 import { NetworkSwitcher } from '../components/NetworkSwitcher'
+import { MintNFTForm } from '../components/MintNFTForm'
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <NetworkSwitcher />
       <h2>Account</h2>
       <Account />
+      <MintNFTForm />
     </div>
   )
 }
