@@ -80,7 +80,7 @@ export function MintNFTForm() {
         <div className="text-green-500">
           Successfully minted your NFT!
           <div>
-            <a className="text-blue-500 hover:underline" href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+            <a className="text-blue-500 hover:underline" href={`https://mumbai.polygonscan.com/tx/${data?.hash}`}>polygonscan</a>
           </div>
         </div>
       )}
