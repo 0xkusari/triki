@@ -36,26 +36,30 @@ export function MintNFTForm() {
 
   return (
     <form
+      className="flex flex-col space-y-4"
       onSubmit={(e) => {
         e.preventDefault()
         write?.()
       }}
     >
-      <label for="tokenId">Token ID</label>
+      <label for="tokenId" className="text-lg font-semibold text-gray-800">Token ID</label>
       <input
         id="tokenId"
+        className="px-3 py-2 border border-gray-300 rounded"
         placeholder="420"
         onChange={(e) => setTokenId(e.target.value)}
         value={tokenId}
       />
-      <button disabled={!write || isLoading}>
+      <button 
+        className={`px-4 py-2 rounded text-white ${write && !isLoading ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`} 
+        disabled={!write || isLoading}>
         {isLoading ? 'Minting...' : '日記を書く'}
       </button>
       {isSuccess && (
-        <div>
+        <div className="text-green-500">
           Successfully minted your NFT!
           <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+            <a className="text-blue-500 hover:underline" href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
           </div>
         </div>
       )}

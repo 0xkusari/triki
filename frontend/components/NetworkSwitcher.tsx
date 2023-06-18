@@ -8,18 +8,19 @@ export function NetworkSwitcher() {
     useSwitchNetwork()
 
   return (
-    <div>
-      <div>
+    <div className="flex flex-col space-y-4">
+      <div className="text-lg font-semibold text-gray-800">
         Connected to {chain?.name ?? chain?.id}
         {chain?.unsupported && ' (unsupported)'}
       </div>
-      <br />
       {switchNetwork && (
-        <div>
-          Switch to:{' '}
+        <div className="flex flex-wrap items-center">
+          <span className="mr-2">Switch to:</span>
           {chains.map((x) =>
             x.id === chain?.id ? null : (
-              <button key={x.id} onClick={() => switchNetwork(x.id)}>
+              <button className="px-4 py-2 mr-2 rounded text-white bg-blue-500 hover:bg-blue-700"
+                key={x.id} 
+                onClick={() => switchNetwork(x.id)}>
                 {x.name}
                 {isLoading && x.id === pendingChainId && ' (switching)'}
               </button>
@@ -27,8 +28,7 @@ export function NetworkSwitcher() {
           )}
         </div>
       )}
-
-      <div>{error?.message}</div>
+      {error && <div className="text-red-500">{error.message}</div>}
     </div>
   )
 }

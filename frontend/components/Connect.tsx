@@ -13,17 +13,18 @@ export function Connect() {
 
   if (isConnected) {
     return (
-      <div>
-        <img src={ensAvatar} alt="ENS Avatar" />
-        <button onClick={disconnect}>Disconnect</button>
+      <div className="flex items-center space-x-4">
+        <img className="w-10 h-10 rounded-full" src={ensAvatar} alt="ENS Avatar" />
+        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={disconnect}>Disconnect</button>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="flex flex-col space-y-2">
       {connectors.map((connector) => (
         <button
+          className={`px-4 py-2 rounded text-white ${connector.ready ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} `}
           disabled={!connector.ready}
           key={connector.id}
           onClick={() => connect({ connector })}
@@ -35,7 +36,7 @@ export function Connect() {
             ' (connecting)'}
         </button>
       ))}
-      {error && <div>{error.message}</div>}
+      {error && <div className="text-red-500">{error.message}</div>}
     </div>
   )
 }
