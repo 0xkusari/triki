@@ -1,14 +1,18 @@
-const { expect } = require('chai');
-const { ethers } = require('hardhat');
+import {
+  time,
+  loadFixture,
+} from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
+import { expect } from "chai";
+import { ethers } from "hardhat";
 
 describe('TrikiWord', function () {
-  let TrikiWord, trikiWord: any, owner: any, addr1, addr2, addrs;
+  let TrikiWord, trikiWord: any, owner: any;
 
   beforeEach(async function () {
     TrikiWord = await ethers.getContractFactory("TrikiWord");
-    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
-    trikiWord = await TrikiWord.deploy("TrikiWord", "TW");
-    await trikiWord.deployed();
+    [owner] = await ethers.getSigners();
+    trikiWord = await TrikiWord.deploy();
   });
 
   describe("Deployment", function () {
@@ -17,7 +21,7 @@ describe('TrikiWord', function () {
     });
 
     it("Should mint 3 new words", async function () {
-      await trikiWord.connect(owner).mint3Words(20230501, "apple", "banana", "cherry");
+      await trikiWord.connect(owner).mint3Words(20230701, "apple", "banana", "cherry");
       expect(await trikiWord.idToWord(1)).to.equal("apple");
       expect(await trikiWord.idToWord(2)).to.equal("banana");
       expect(await trikiWord.idToWord(3)).to.equal("cherry");
