@@ -8,7 +8,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
-const walletConnectProjectId = 'triki'
+const walletConnectProjectId = process.env.WALLET_CONNECT_PROJECT_ID
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [polygon, ...(process.env.NODE_ENV === 'development' ? [polygonMumbai] : [])],
