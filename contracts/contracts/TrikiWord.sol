@@ -2,11 +2,12 @@
 
 pragma solidity ^0.8.18;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract TrikiWord is ERC721 {
+contract TrikiWord is ERC721, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -15,10 +16,7 @@ contract TrikiWord is ERC721 {
     mapping(string => uint256) public wordToId;
     mapping(string => uint256) public wordToDate;
 
-    constructor(
-        string memory name,
-        string memory symbol
-    ) ERC721(name, symbol) {}
+    constructor() ERC721("TrikiWord", "TW") {}
 
     function mint3Words(
         uint256 date,
