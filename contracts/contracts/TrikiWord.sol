@@ -15,10 +15,7 @@ contract TrikiWord is ERC721 {
     mapping(string => uint256) public wordToId;
     mapping(string => uint256) public wordToDate;
 
-    constructor(
-        string memory name,
-        string memory symbol
-    ) ERC721(name, symbol) {}
+    constructor() ERC721("TrikiWord", "TW") {}
 
     function mint3Words(
         uint256 date,
