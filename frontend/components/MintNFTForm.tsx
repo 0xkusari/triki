@@ -33,6 +33,19 @@ export function MintNFTForm() {
     textAreaRef.current.style.height = "auto";
     textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
   }, [generatedText]);
+
+  const wagmigotchiABI = '{"inputs":[{"internalType":"uint256","name":"date","type":"uint256"},{"internalType":"string","name":"word1","type":"string"},{"internalType":"string","name":"word2","type":"string"},{"internalType":"string","name":"word3","type":"string"}],"name":"mint3Words","outputs":[],"stateMutability":"nonpayable","type":"function"}'
+  const { config } = usePrepareContractWrite({
+    address: '0x483dE0a8B2D33ECa5eA3A049bA33E1d33b38B281',
+    abi: wagmigotchiABI,
+    functionName: 'mint3Words',
+    args: [1687173199, word1, word2, word3],
+  })
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(config)
+
+  console.log('data', data);
+  console.log('ABI', wagmigotchiABI);
   
   const handleSubmit = async (e) => {
     console.log('OpenAIのAPIを呼び出す');
@@ -61,26 +74,10 @@ export function MintNFTForm() {
     }
   };
 
-  //const { config } = usePrepareContractWrite({
-  //  address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
-  //  abi: [
-  //    {
-  //      name: 'mint',
-  //      type: 'function',
-  //      stateMutability: 'nonpayable',
-  //      inputs: [{ internalType: 'uint32', name: 'tokenId', type: 'uint32' }],
-  //      outputs: [],
-  //    },
-  //  ],
-  //  functionName: 'mint',
-  //  args: ['nikki text'],
-  //  enabled: Boolean(word1 && word2 && word3),
-  //})
-  //const { data, write } = useContractWrite(config)
-
-  //const { isLoading, isSuccess } = useWaitForTransaction({
-  //  hash: data?.hash,
-  //})
+  const handleSubmitForWordsMint = async (e) => {
+    e.preventDefault();
+    console.log('3つのワードでMintする');
+  };
 
   return (
     <form
@@ -123,6 +120,15 @@ export function MintNFTForm() {
       >
         日記を書く
       </button>
+      <button
+        className={`px-4 py-2 rounded text-white bg-blue-500 hover:bg-blue-700`} 
+        disabled={write}
+        onClick={() => write?.()}
+      >
+        3つのワードでMintする
+      </button>
+      {isLoading && <div>Check Wallet</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
     </form>
   )
 }
