@@ -50,7 +50,7 @@ export function MintNFTForm() {
       },
     ],
     functionName: 'mint3Words',
-    args: [20230618, word1, word2, word3],
+    args: [date, word1, word2, word3],
     enabled: true,
   })
 
@@ -106,7 +106,7 @@ export function MintNFTForm() {
       <input
         id="word1"
         className="px-3 py-2 border border-gray-300 rounded"
-        placeholder="420"
+        placeholder="word1"
         value={word1}
         onChange={handleWord1Change}
       />
@@ -114,7 +114,7 @@ export function MintNFTForm() {
       <input
         id="word2"
         className="px-3 py-2 border border-gray-300 rounded"
-        placeholder="420"
+        placeholder="word2"
         value={word2}
         onChange={handleWord2Change}
       />
@@ -122,14 +122,16 @@ export function MintNFTForm() {
       <input
         id="word3"
         className="px-3 py-2 border border-gray-300 rounded"
-        placeholder="420"
+        placeholder="word3"
         value={word3}
         onChange={handleWord3Change}
       />
+      <label for="generatedText" className="text-lg font-semibold text-gray-800">Generated Text</label>
       <textarea
         ref={textAreaRef}
         className="px-3 py-2 mt-4 border border-gray-300 rounded"
         value={generatedText}
+        placeholder="生成された文章"
         onChange={handleTextareaChange}
         style={{height: 'auto', overflow: 'auto'}}
       />
