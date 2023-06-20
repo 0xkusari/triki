@@ -4,8 +4,10 @@ pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./BokkyPooBahsDateTimeLibrary.sol";
 
 contract TrikiWord is ERC721, Ownable {
     using Counters for Counters.Counter;
@@ -13,8 +15,7 @@ contract TrikiWord is ERC721, Ownable {
 
     mapping(address => mapping(uint256 => uint256[3])) public walletDateToWords;
     mapping(uint256 => string) public idToWord;
-    mapping(string => uint256) public wordToId;
-    mapping(string => uint256) public wordToDate;
+    mapping(uint256 => uint256) public idToDate;
 
     constructor() ERC721("TrikiWord", "TW") {}
 
@@ -77,15 +78,16 @@ contract TrikiWord is ERC721, Ownable {
 
         _mint(to, newTokenId);
         idToWord[newTokenId] = word;
-        wordToId[word] = newTokenId;
-        wordToDate[word] = date;
+        idToDate[newTokenId] = date;
     }
 
     function _getCurrentDate() internal view returns (uint256) {
-        uint256 day = block.timestamp / 60 / 60 / 24;
-        uint256 year = 1970 + day / 365;
-        uint256 month = (day % 365) / 30 + 1;
-        uint256 date = ((day % 365) % 30) + 1;
+        uint year;
+        uint month;
+        uint date;
+        (year, month, date) = BokkyPooBahsDateTimeLibrary.timestampToDate(
+            block.timestamp
+        );
         return year * 10000 + month * 100 + date;
     }
 
@@ -95,40 +97,46 @@ contract TrikiWord is ERC721, Ownable {
         require(_exists(tokenId), "Nonexistent token");
 
         string memory word = idToWord[tokenId];
-        uint256 date = wordToDate[word];
+        uint256 date = idToDate[tokenId];
 
-        string memory json = string(
-            abi.encodePacked(
-                "{",
-                '"name": "',
-                Strings.toString(tokenId),
-                " ",
-                word,
-                '",',
-                '"description": "',
-                word,
-                " on ",
-                Strings.toString(date),
-                '",',
-                '"attributes": [',
-                "{",
-                '"trait_type": "Keyword",',
-                '"value": "',
-                word,
-                '"',
-                "},",
-                "{",
-                '"trait_type": "Date",',
-                '"value": "',
-                Strings.toString(date),
-                '"',
-                "}",
-                "],",
-                '"image": "https://0xkusari.github.io/triki/triki.jpg"',
-                "}"
-            )
-        );
-
-        return json;
+        return
+            string(
+                abi.encodePacked(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
+                            abi.encodePacked(
+                                "{",
+                                '"name": "#',
+                                Strings.toString(tokenId),
+                                " | ",
+                                word,
+                                '",',
+                                '"description": "',
+                                word,
+                                " on ",
+                                Strings.toString(date),
+                                '",',
+                                '"attributes": [',
+                                "{",
+                                '"trait_type": "Keyword",',
+                                '"value": "',
+                                word,
+                                '"',
+                                "},",
+                                "{",
+                                '"trait_type": "Date",',
+                                '"value": "',
+                                Strings.toString(date),
+                                '"',
+                                "}",
+                                "],",
+                                '"image": "https://0xkusari.github.io/triki/triki.jpg"',
+                                "}"
+                            )
+                        )
+                    )
+                )
+            );
     }
 }
