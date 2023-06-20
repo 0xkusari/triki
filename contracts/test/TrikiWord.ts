@@ -21,7 +21,7 @@ describe('TrikiWord', function () {
     });
 
     it("Should mint 3 new words", async function () {
-      await trikiWord.connect(owner).mint3Words(20230701, "apple", "banana", "cherry");
+      await trikiWord.connect(owner).mint3Words(20230619, "apple", "banana", "cherry");
       expect(await trikiWord.idToWord(1)).to.equal("apple");
       expect(await trikiWord.idToWord(2)).to.equal("banana");
       expect(await trikiWord.idToWord(3)).to.equal("cherry");

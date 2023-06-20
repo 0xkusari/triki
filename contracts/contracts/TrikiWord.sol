@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./BokkyPooBahsDateTimeLibrary.sol";
 
 contract TrikiWord is ERC721, Ownable {
     using Counters for Counters.Counter;
@@ -80,10 +81,12 @@ contract TrikiWord is ERC721, Ownable {
     }
 
     function _getCurrentDate() internal view returns (uint256) {
-        uint256 day = block.timestamp / 60 / 60 / 24;
-        uint256 year = 1970 + day / 365;
-        uint256 month = (day % 365) / 30 + 1;
-        uint256 date = ((day % 365) % 30) + 1;
+        uint year;
+        uint month;
+        uint date;
+        (year, month, date) = BokkyPooBahsDateTimeLibrary.timestampToDate(
+            block.timestamp
+        );
         return year * 10000 + month * 100 + date;
     }
 
