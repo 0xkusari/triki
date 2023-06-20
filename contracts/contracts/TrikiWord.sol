@@ -13,8 +13,7 @@ contract TrikiWord is ERC721, Ownable {
 
     mapping(address => mapping(uint256 => uint256[3])) public walletDateToWords;
     mapping(uint256 => string) public idToWord;
-    mapping(string => uint256) public wordToId;
-    mapping(string => uint256) public wordToDate;
+    mapping(uint256 => uint256) public idToDate;
 
     constructor() ERC721("TrikiWord", "TW") {}
 
@@ -77,8 +76,7 @@ contract TrikiWord is ERC721, Ownable {
 
         _mint(to, newTokenId);
         idToWord[newTokenId] = word;
-        wordToId[word] = newTokenId;
-        wordToDate[word] = date;
+        idToDate[newTokenId] = date;
     }
 
     function _getCurrentDate() internal view returns (uint256) {
@@ -95,7 +93,7 @@ contract TrikiWord is ERC721, Ownable {
         require(_exists(tokenId), "Nonexistent token");
 
         string memory word = idToWord[tokenId];
-        uint256 date = wordToDate[word];
+        uint256 date = idToDate[tokenId];
 
         string memory json = string(
             abi.encodePacked(
