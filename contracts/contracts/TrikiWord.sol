@@ -4,6 +4,7 @@ pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./BokkyPooBahsDateTimeLibrary.sol";
@@ -98,38 +99,44 @@ contract TrikiWord is ERC721, Ownable {
         string memory word = idToWord[tokenId];
         uint256 date = idToDate[tokenId];
 
-        string memory json = string(
-            abi.encodePacked(
-                "{",
-                '"name": "',
-                Strings.toString(tokenId),
-                " ",
-                word,
-                '",',
-                '"description": "',
-                word,
-                " on ",
-                Strings.toString(date),
-                '",',
-                '"attributes": [',
-                "{",
-                '"trait_type": "Keyword",',
-                '"value": "',
-                word,
-                '"',
-                "},",
-                "{",
-                '"trait_type": "Date",',
-                '"value": "',
-                Strings.toString(date),
-                '"',
-                "}",
-                "],",
-                '"image": "https://0xkusari.github.io/triki/triki.jpg"',
-                "}"
-            )
-        );
-
-        return json;
+        return
+            string(
+                abi.encodePacked(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
+                            abi.encodePacked(
+                                "{",
+                                '"name": "#',
+                                Strings.toString(tokenId),
+                                " | ",
+                                word,
+                                '",',
+                                '"description": "',
+                                word,
+                                " on ",
+                                Strings.toString(date),
+                                '",',
+                                '"attributes": [',
+                                "{",
+                                '"trait_type": "Keyword",',
+                                '"value": "',
+                                word,
+                                '"',
+                                "},",
+                                "{",
+                                '"trait_type": "Date",',
+                                '"value": "',
+                                Strings.toString(date),
+                                '"',
+                                "}",
+                                "],",
+                                '"image": "https://0xkusari.github.io/triki/triki.jpg"',
+                                "}"
+                            )
+                        )
+                    )
+                )
+            );
     }
 }
