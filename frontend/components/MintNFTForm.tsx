@@ -1,5 +1,7 @@
 'use client'
 
+import moment from 'moment-strftime';
+
 import * as React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -9,9 +11,10 @@ import {
 } from 'wagmi'
 
 export function MintNFTForm() {
-  const [word1, setWord1] = useState('Ethereum');
-  const [word2, setWord2] = useState('公園');
-  const [word3, setWord3] = useState('コメダ珈琲');
+  const [word1, setWord1] = useState('');
+  const [word2, setWord2] = useState('');
+  const [word3, setWord3] = useState('');
+  const [date, setDate] = useState(moment().strftime('%Y%m%d'));
   const [generatedText, setGeneratedText] = useState('');
 
   const textAreaRef = useRef(null);
@@ -19,6 +22,7 @@ export function MintNFTForm() {
   const handleWord1Change = (e) => setWord1(e.target.value);
   const handleWord2Change = (e) => setWord2(e.target.value);
   const handleWord3Change = (e) => setWord3(e.target.value);
+  const handleDateChange = (e) => setDate(e.target.value);
 
   const handleTextareaChange = (e) => {
     setGeneratedText(e.target.value);
@@ -34,18 +38,25 @@ export function MintNFTForm() {
     textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
   }, [generatedText]);
 
-  const wagmigotchiABI = '{"inputs":[{"internalType":"uint256","name":"date","type":"uint256"},{"internalType":"string","name":"word1","type":"string"},{"internalType":"string","name":"word2","type":"string"},{"internalType":"string","name":"word3","type":"string"}],"name":"mint3Words","outputs":[],"stateMutability":"nonpayable","type":"function"}'
   const { config } = usePrepareContractWrite({
-    address: '0x483dE0a8B2D33ECa5eA3A049bA33E1d33b38B281',
-    abi: wagmigotchiABI,
+    address: '0x528206a5589e40fb05657f0893feec8fdade2e5a',
+    abi: [
+      {
+        name: 'mint3Words',
+        type: 'function',
+        stateMutability: 'nonpayable',
+        inputs: [{ internalType: 'uint256', name: 'date', type: 'uint256'}, { internalType: 'string', name: 'word1', type: 'string'}, { internalType: 'string', name: 'word2', type: 'string'}, { internalType: 'string', name: 'word3', type: 'string'}],
+        outputs: [],
+      },
+    ],
     functionName: 'mint3Words',
-    args: [1687173199, word1, word2, word3],
+    args: [20230618, word1, word2, word3],
+    enabled: true,
   })
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config)
 
   console.log('data', data);
-  console.log('ABI', wagmigotchiABI);
   
   const handleSubmit = async (e) => {
     console.log('OpenAIのAPIを呼び出す');
@@ -82,8 +93,15 @@ export function MintNFTForm() {
   return (
     <form
       className="flex flex-col space-y-4"
-      onSubmit={handleSubmit}
     >
+      <label for="date" className="text-lg font-semibold text-gray-800">Date</label>
+      <input
+        id="date"
+        className="px-3 py-2 border border-gray-300 rounded"
+        placeholder="20230620"
+        value={date}
+        onChange={handleDateChange}
+      />
       <label for="word1" className="text-lg font-semibold text-gray-800">word 1</label>
       <input
         id="word1"
@@ -115,15 +133,10 @@ export function MintNFTForm() {
         onChange={handleTextareaChange}
         style={{height: 'auto', overflow: 'auto'}}
       />
-      <button 
-        className={`px-4 py-2 rounded text-white bg-blue-500 hover:bg-blue-700`} 
-      >
-        日記を書く
-      </button>
       <button
         className={`px-4 py-2 rounded text-white bg-blue-500 hover:bg-blue-700`} 
-        disabled={write}
-        onClick={() => write?.()}
+        disabled={!write}
+        onClick={() => write()}
       >
         3つのワードでMintする
       </button>
