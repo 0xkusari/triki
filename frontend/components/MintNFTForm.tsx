@@ -131,7 +131,6 @@ export function MintNFTForm() {
         ref={textAreaRef}
         className="px-3 py-2 mt-4 border border-gray-300 rounded"
         value={generatedText}
-        placeholder="生成された文章"
         onChange={handleTextareaChange}
         style={{height: 'auto', overflow: 'auto'}}
       />
@@ -140,7 +139,7 @@ export function MintNFTForm() {
         disabled={!write}
         onClick={() => write()}
       >
-        3つのワードでMintする
+        Mint
       </button>
       {isLoading && <div>Check Wallet</div>}
       {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
